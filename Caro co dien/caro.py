@@ -71,24 +71,24 @@ class Board:
     def is_full(self):
         return self.marked_sqrs == self.size * self.size  # Kiểm tra bàn cờ có đầy không
 
-    # Tính độ dài dây liên tiếp dài nhất của một người chơi trên bàn cờ
-    def longest_sequence(self, player):
-        longest = 0  # Độ dài lớn nhất của chuỗi
-        directions = [(1, 0), (0, 1), (1, 1), (1, -1)]  # Các hướng có thể kiểm tra
-        for row in range(self.size):
-            for col in range(self.size):
-                if self.squares[row][col] == player:
-                    for dr, dc in directions:
-                        count = 0
-                        for delta in range(-self.max_item_win + 1, self.max_item_win):
-                            r = row + delta * dr
-                            c = col + delta * dc
-                            if 0 <= r < self.size and 0 <= c < self.size and self.squares[r][c] == player:
-                                count += 1
-                                longest = max(longest, count)
-                            else:
-                                count = 0
-        return longest
+    # # Tính độ dài dây liên tiếp dài nhất của một người chơi trên bàn cờ
+    # def longest_sequence(self, player):
+    #     longest = 0  # Độ dài lớn nhất của chuỗi
+    #     directions = [(1, 0), (0, 1), (1, 1), (1, -1)]  # Các hướng có thể kiểm tra
+    #     for row in range(self.size):
+    #         for col in range(self.size):
+    #             if self.squares[row][col] == player:
+    #                 for dr, dc in directions:
+    #                     count = 0
+    #                     for delta in range(-self.max_item_win + 1, self.max_item_win):
+    #                         r = row + delta * dr
+    #                         c = col + delta * dc
+    #                         if 0 <= r < self.size and 0 <= c < self.size and self.squares[r][c] == player:
+    #                             count += 1
+    #                             longest = max(longest, count)
+    #                         else:
+    #                             count = 0
+    #     return longest
 
 
 class AI:
@@ -234,51 +234,51 @@ class AI:
                         return True
         return False
 
-    def evaluate_sequences(self, board, player):
-        score = 0
-        directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
-        for row in range(board.size):
-            for col in range(board.size):
-                for dr, dc in directions:
-                    score += self.evaluate_direction(board, row, col, dr, dc, player)
-        return score
+    # def evaluate_sequences(self, board, player):
+    #     score = 0
+    #     directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
+    #     for row in range(board.size):
+    #         for col in range(board.size):
+    #             for dr, dc in directions:
+    #                 score += self.evaluate_direction(board, row, col, dr, dc, player)
+    #     return score
 
-    def evaluate_direction(self, board, row, col, dr, dc, player):
-        score = 0
-        max_win = board.max_item_win
-        line = []
-        for i in range(max_win):
-            r, c = row + i * dr, col + i * dc
-            if 0 <= r < board.size and 0 <= c < board.size:
-                line.append(board.squares[r][c])
-            else:
-                break
-        if len(line) >= max_win:
-            score += self.score_window(line, player, max_win)
-        return score
+    # def evaluate_direction(self, board, row, col, dr, dc, player):
+    #     score = 0
+    #     max_win = board.max_item_win
+    #     line = []
+    #     for i in range(max_win):
+    #         r, c = row + i * dr, col + i * dc
+    #         if 0 <= r < board.size and 0 <= c < board.size:
+    #             line.append(board.squares[r][c])
+    #         else:
+    #             break
+    #     if len(line) >= max_win:
+    #         score += self.score_window(line, player, max_win)
+    #     return score
 
-    def score_window(self, window, player, max_win):
-        score = 0
-        opponent = 3 - player
+    # def score_window(self, window, player, max_win):
+    #     score = 0
+    #     opponent = 3 - player
 
-        player_count = window.count(player)
-        opponent_count = window.count(opponent)
-        empty_count = window.count(0)
+    #     player_count = window.count(player)
+    #     opponent_count = window.count(opponent)
+    #     empty_count = window.count(0)
 
-        if opponent_count == max_win - 1 and empty_count == 1:
-            score -= 2000  # Prioritize blocking opponent's winning move
-        elif player_count == max_win - 1 and empty_count == 1:
-            score += 1000
-        elif opponent_count == max_win - 2 and empty_count == 2:
-            score -= 500
-        elif player_count == max_win - 2 and empty_count == 2:
-            score += 100
-        elif player_count > 0 and opponent_count == 0:
-            score += 10 * player_count
-        elif opponent_count > 0 and player_count == 0:
-            score -= 15 * opponent_count
+    #     if opponent_count == max_win - 1 and empty_count == 1:
+    #         score -= 2000  # Prioritize blocking opponent's winning move
+    #     elif player_count == max_win - 1 and empty_count == 1:
+    #         score += 1000
+    #     elif opponent_count == max_win - 2 and empty_count == 2:
+    #         score -= 500
+    #     elif player_count == max_win - 2 and empty_count == 2:
+    #         score += 100
+    #     elif player_count > 0 and opponent_count == 0:
+    #         score += 10 * player_count
+    #     elif opponent_count > 0 and player_count == 0:
+    #         score -= 15 * opponent_count
 
-        return score
+    #     return score
 
     def evaluate_potential_advantages(self, board, player):
         score = 0
